@@ -138,6 +138,8 @@ class MonthlyDrawer extends ConsumerWidget {
 
     final holidayState = _ref.watch(holidayProvider);
 
+    final selectDate = _ref.watch(appParamProvider.select((value) => value.selectDate));
+
     _ref.watch(drawerListProvider.select((value) => value.drawerDateList)).forEach((element) {
       final dispDay = '${element.day.toString().padLeft(2, '0')}（${element.youbiStr.substring(0, 3)}）';
 
@@ -159,8 +161,15 @@ class MonthlyDrawer extends ConsumerWidget {
 
                 Navigator.pop(_context);
               },
-              child: const Icon(Icons.trending_up_sharp, size: 14),
+              child: Icon(
+                Icons.call_made,
+                size: 14,
+                color: (selectDate != null && selectDate.yyyymmdd == element.yyyymmdd)
+                    ? Colors.orangeAccent
+                    : Colors.white,
+              ),
             ),
+            const SizedBox(width: 10),
           ],
         ),
       ));
