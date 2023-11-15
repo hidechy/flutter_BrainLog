@@ -1,9 +1,11 @@
-import 'package:brain_log/extensions/extensions.dart';
-import 'package:brain_log/state/app_param/app_param_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../alert/yearly_calendar_alert.dart';
+import '../components/_brain_log_dialog.dart';
 import '../components/monthly_drawer.dart';
+import '../extensions/extensions.dart';
+import '../state/app_param/app_param_notifier.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, this.date});
@@ -20,7 +22,18 @@ class HomeScreen extends ConsumerWidget {
         : '';
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Brain Log'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              BrainLogDialog(context: context, widget: YearlyCalendarAlert());
+            },
+            icon: const Icon(Icons.calendar_today),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(20),
