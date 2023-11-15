@@ -1,9 +1,11 @@
+import 'package:brain_log/utility/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
 import '../state/app_param/app_param_notifier.dart';
 import '../state/drawer_list/drawer_list_notifier.dart';
+import '../viewmodel/holiday_notifier.dart';
 
 // ignore: must_be_immutable
 class MonthlyDrawer extends ConsumerWidget {
@@ -11,11 +13,15 @@ class MonthlyDrawer extends ConsumerWidget {
 
   final ScrollController _scrollControllerMonth = ScrollController();
 
+  final Utility _utility = Utility();
+
+  late BuildContext _context;
   late WidgetRef _ref;
 
   ///
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    _context = context;
     _ref = ref;
 
     final appParamState = ref.watch(appParamProvider);
@@ -30,6 +36,10 @@ class MonthlyDrawer extends ConsumerWidget {
         ref
             .read(drawerListProvider.notifier)
             .makeDrawerDateList(year: DateTime.now().year, month: DateTime.now().month);
+      } else {
+        ref
+            .read(drawerListProvider.notifier)
+            .makeDrawerDateList(year: appParamState.selectYear, month: appParamState.selectMonth);
       }
 
       if (appParamState.selectMonth > 6) {
@@ -126,6 +136,8 @@ class MonthlyDrawer extends ConsumerWidget {
   Widget _displayDrawerDateList() {
     final list = <Widget>[];
 
+    final holidayState = _ref.watch(holidayProvider);
+
     _ref.watch(drawerListProvider.select((value) => value.drawerDateList)).forEach((element) {
       final dispDay = '${element.day.toString().padLeft(2, '0')}（${element.youbiStr.substring(0, 3)}）';
 
@@ -133,24 +145,28 @@ class MonthlyDrawer extends ConsumerWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(vertical: 3),
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.white.withOpacity(0.3),
-            ),
-          ),
-          color:
-              (element.yyyymmdd == DateTime.now().yyyymmdd) ? Colors.yellowAccent.withOpacity(0.1) : Colors.transparent,
+          border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3))),
+          color: (DateTime.now().yyyymmdd == element.yyyymmdd)
+              ? Colors.yellowAccent.withOpacity(0.2)
+              : _utility.getYoubiColor(date: element, youbiStr: element.youbiStr, holiday: holidayState.data),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(dispDay),
-            Container(),
+            Expanded(child: Text(dispDay)),
+            GestureDetector(
+              onTap: () {
+                _ref.read(appParamProvider.notifier).setSelectDate(date: element);
+
+                Navigator.pop(_context);
+              },
+              child: const Icon(Icons.trending_up_sharp, size: 14),
+            ),
           ],
         ),
       ));
     });
 
-    return SingleChildScrollView(child: Column(children: list));
+    return SingleChildScrollView(
+        child: DefaultTextStyle(style: const TextStyle(fontSize: 10), child: Column(children: list)));
   }
 }

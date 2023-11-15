@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppParamState {
   int get selectYear => throw _privateConstructorUsedError;
   int get selectMonth => throw _privateConstructorUsedError;
+  DateTime? get selectDate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppParamStateCopyWith<AppParamState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $AppParamStateCopyWith<$Res> {
           AppParamState value, $Res Function(AppParamState) then) =
       _$AppParamStateCopyWithImpl<$Res, AppParamState>;
   @useResult
-  $Res call({int selectYear, int selectMonth});
+  $Res call({int selectYear, int selectMonth, DateTime? selectDate});
 }
 
 /// @nodoc
@@ -48,6 +49,7 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
   $Res call({
     Object? selectYear = null,
     Object? selectMonth = null,
+    Object? selectDate = freezed,
   }) {
     return _then(_value.copyWith(
       selectYear: null == selectYear
@@ -58,6 +60,10 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
           ? _value.selectMonth
           : selectMonth // ignore: cast_nullable_to_non_nullable
               as int,
+      selectDate: freezed == selectDate
+          ? _value.selectDate
+          : selectDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -70,7 +76,7 @@ abstract class _$$AppParamStateImplCopyWith<$Res>
       __$$AppParamStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int selectYear, int selectMonth});
+  $Res call({int selectYear, int selectMonth, DateTime? selectDate});
 }
 
 /// @nodoc
@@ -86,6 +92,7 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
   $Res call({
     Object? selectYear = null,
     Object? selectMonth = null,
+    Object? selectDate = freezed,
   }) {
     return _then(_$AppParamStateImpl(
       selectYear: null == selectYear
@@ -96,6 +103,10 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
           ? _value.selectMonth
           : selectMonth // ignore: cast_nullable_to_non_nullable
               as int,
+      selectDate: freezed == selectDate
+          ? _value.selectDate
+          : selectDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -103,7 +114,8 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppParamStateImpl implements _AppParamState {
-  const _$AppParamStateImpl({this.selectYear = 0, this.selectMonth = 0});
+  _$AppParamStateImpl(
+      {this.selectYear = 0, this.selectMonth = 0, this.selectDate});
 
   @override
   @JsonKey()
@@ -111,10 +123,12 @@ class _$AppParamStateImpl implements _AppParamState {
   @override
   @JsonKey()
   final int selectMonth;
+  @override
+  final DateTime? selectDate;
 
   @override
   String toString() {
-    return 'AppParamState(selectYear: $selectYear, selectMonth: $selectMonth)';
+    return 'AppParamState(selectYear: $selectYear, selectMonth: $selectMonth, selectDate: $selectDate)';
   }
 
   @override
@@ -125,11 +139,14 @@ class _$AppParamStateImpl implements _AppParamState {
             (identical(other.selectYear, selectYear) ||
                 other.selectYear == selectYear) &&
             (identical(other.selectMonth, selectMonth) ||
-                other.selectMonth == selectMonth));
+                other.selectMonth == selectMonth) &&
+            (identical(other.selectDate, selectDate) ||
+                other.selectDate == selectDate));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectYear, selectMonth);
+  int get hashCode =>
+      Object.hash(runtimeType, selectYear, selectMonth, selectDate);
 
   @JsonKey(ignore: true)
   @override
@@ -139,13 +156,17 @@ class _$AppParamStateImpl implements _AppParamState {
 }
 
 abstract class _AppParamState implements AppParamState {
-  const factory _AppParamState({final int selectYear, final int selectMonth}) =
-      _$AppParamStateImpl;
+  factory _AppParamState(
+      {final int selectYear,
+      final int selectMonth,
+      final DateTime? selectDate}) = _$AppParamStateImpl;
 
   @override
   int get selectYear;
   @override
   int get selectMonth;
+  @override
+  DateTime? get selectDate;
   @override
   @JsonKey(ignore: true)
   _$$AppParamStateImplCopyWith<_$AppParamStateImpl> get copyWith =>
