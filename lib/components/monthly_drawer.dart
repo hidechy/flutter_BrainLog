@@ -1,3 +1,4 @@
+import 'package:brain_log/state/app_param/app_param_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,13 +8,14 @@ class MonthlyDrawer extends ConsumerWidget {
   ///
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ///
+    final appParamState = ref.watch(appParamProvider);
+
+    //////////////////////////////////////////////
     final drawerYears = <int>[];
     for (var i = 1973; i <= DateTime.now().year + 10; i++) {
       drawerYears.add(i);
     }
 
-    ///
     final drawerYearDropDown = DropdownButton(
       dropdownColor: Colors.pinkAccent.withOpacity(0.1),
       iconEnabledColor: Colors.white,
@@ -23,14 +25,10 @@ class MonthlyDrawer extends ConsumerWidget {
           child: Text(e.toString(), style: const TextStyle(fontSize: 12)),
         );
       }).toList(),
-      // value: mapPinpointState.pinpointMapZoom,
-      // onChanged: (value) async => _ref.watch(mapPinpointProvider.notifier).setPinpointMapZoom(zoom: value!),
-      //
-      //
-
-      value: DateTime.now().year,
-      onChanged: (value) async {},
+      value: (appParamState.selectYear == 0) ? DateTime.now().year : appParamState.selectYear,
+      onChanged: (value) => ref.read(appParamProvider.notifier).setSelectYear(year: value!),
     );
+    //////////////////////////////////////////////
 
     return Drawer(
       backgroundColor: Colors.blueGrey.withOpacity(0.4),
@@ -52,6 +50,14 @@ class MonthlyDrawer extends ConsumerWidget {
               children: [
                 const SizedBox(height: 70),
                 drawerYearDropDown,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(12, (index) => index + 1).map((e) {
+                      return Text(e.toString().padLeft(2, '0'));
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
           ),
