@@ -26,6 +26,8 @@ class MonthlyDrawer extends ConsumerWidget {
 
     final appParamState = ref.watch(appParamProvider);
 
+    /*
+
     //================================//
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (appParamState.selectYear == 0 || appParamState.selectMonth == 0) {
@@ -48,6 +50,14 @@ class MonthlyDrawer extends ConsumerWidget {
     });
     //================================//
 
+    */
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (DateTime.now().month > 6) {
+        _scrollControllerMonth.jumpTo(_scrollControllerMonth.position.maxScrollExtent);
+      }
+    });
+
     //////////////////////////////////////////////
     final drawerYears = <int>[];
     for (var i = 1973; i <= DateTime.now().year + 10; i++) {
@@ -63,7 +73,7 @@ class MonthlyDrawer extends ConsumerWidget {
           child: Text(e.toString(), style: const TextStyle(fontSize: 12)),
         );
       }).toList(),
-      value: (appParamState.selectYear == 0) ? DateTime.now().year : appParamState.selectYear,
+      value: (appParamState.selectYear == null) ? DateTime.now().year : appParamState.selectYear,
       onChanged: (value) {
         ref.read(appParamProvider.notifier).setSelectMonth(month: 0);
         ref.read(appParamProvider.notifier).setSelectYear(year: value!);
@@ -108,7 +118,9 @@ class MonthlyDrawer extends ConsumerWidget {
                           ref.read(appParamProvider.notifier).setSelectMonth(month: e);
 
                           ref.read(drawerListProvider.notifier).makeDrawerDateList(
-                                year: (appParamState.selectYear == 0) ? DateTime.now().year : appParamState.selectYear,
+                                year: (appParamState.selectYear == null)
+                                    ? DateTime.now().year
+                                    : appParamState.selectYear!,
                                 month: e,
                               );
                         },

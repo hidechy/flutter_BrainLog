@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AppParamState {
-  int get selectYear => throw _privateConstructorUsedError;
-  int get selectMonth => throw _privateConstructorUsedError;
+  int? get selectYear => throw _privateConstructorUsedError;
+  int? get selectMonth => throw _privateConstructorUsedError;
   DateTime? get selectDate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,7 +31,7 @@ abstract class $AppParamStateCopyWith<$Res> {
           AppParamState value, $Res Function(AppParamState) then) =
       _$AppParamStateCopyWithImpl<$Res, AppParamState>;
   @useResult
-  $Res call({int selectYear, int selectMonth, DateTime? selectDate});
+  $Res call({int? selectYear, int? selectMonth, DateTime? selectDate});
 }
 
 /// @nodoc
@@ -47,19 +47,19 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectYear = null,
-    Object? selectMonth = null,
+    Object? selectYear = freezed,
+    Object? selectMonth = freezed,
     Object? selectDate = freezed,
   }) {
     return _then(_value.copyWith(
-      selectYear: null == selectYear
+      selectYear: freezed == selectYear
           ? _value.selectYear
           : selectYear // ignore: cast_nullable_to_non_nullable
-              as int,
-      selectMonth: null == selectMonth
+              as int?,
+      selectMonth: freezed == selectMonth
           ? _value.selectMonth
           : selectMonth // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       selectDate: freezed == selectDate
           ? _value.selectDate
           : selectDate // ignore: cast_nullable_to_non_nullable
@@ -76,7 +76,7 @@ abstract class _$$AppParamStateImplCopyWith<$Res>
       __$$AppParamStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int selectYear, int selectMonth, DateTime? selectDate});
+  $Res call({int? selectYear, int? selectMonth, DateTime? selectDate});
 }
 
 /// @nodoc
@@ -90,19 +90,19 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectYear = null,
-    Object? selectMonth = null,
+    Object? selectYear = freezed,
+    Object? selectMonth = freezed,
     Object? selectDate = freezed,
   }) {
     return _then(_$AppParamStateImpl(
-      selectYear: null == selectYear
+      selectYear: freezed == selectYear
           ? _value.selectYear
           : selectYear // ignore: cast_nullable_to_non_nullable
-              as int,
-      selectMonth: null == selectMonth
+              as int?,
+      selectMonth: freezed == selectMonth
           ? _value.selectMonth
           : selectMonth // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       selectDate: freezed == selectDate
           ? _value.selectDate
           : selectDate // ignore: cast_nullable_to_non_nullable
@@ -114,15 +114,12 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppParamStateImpl implements _AppParamState {
-  _$AppParamStateImpl(
-      {this.selectYear = 0, this.selectMonth = 0, this.selectDate});
+  _$AppParamStateImpl({this.selectYear, this.selectMonth, this.selectDate});
 
   @override
-  @JsonKey()
-  final int selectYear;
+  final int? selectYear;
   @override
-  @JsonKey()
-  final int selectMonth;
+  final int? selectMonth;
   @override
   final DateTime? selectDate;
 
@@ -157,14 +154,14 @@ class _$AppParamStateImpl implements _AppParamState {
 
 abstract class _AppParamState implements AppParamState {
   factory _AppParamState(
-      {final int selectYear,
-      final int selectMonth,
+      {final int? selectYear,
+      final int? selectMonth,
       final DateTime? selectDate}) = _$AppParamStateImpl;
 
   @override
-  int get selectYear;
+  int? get selectYear;
   @override
-  int get selectMonth;
+  int? get selectMonth;
   @override
   DateTime? get selectDate;
   @override

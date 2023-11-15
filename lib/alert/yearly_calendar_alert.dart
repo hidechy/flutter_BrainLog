@@ -51,7 +51,7 @@ class YearlyCalendarAlert extends ConsumerWidget {
   Widget _getCalendar() {
     final selectYear = _ref.watch(appParamProvider.select((value) => value.selectYear));
 
-    yearFirst = DateTime((selectYear != 0) ? selectYear : DateTime.now().year);
+    yearFirst = DateTime((selectYear != null) ? selectYear : DateTime.now().year);
 
     final yearEnd = DateTime(yearFirst.year + 1, 1, 0);
 
