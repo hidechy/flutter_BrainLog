@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../extensions/extensions.dart';
 import '../state/app_param/app_param_notifier.dart';
 import '../state/drawer_list/drawer_list_notifier.dart';
 
 // ignore: must_be_immutable
 class MonthlyDrawer extends ConsumerWidget {
   MonthlyDrawer({super.key});
+
+  final ScrollController _scrollControllerMonth = ScrollController();
 
   late WidgetRef _ref;
 
@@ -15,16 +18,25 @@ class MonthlyDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     _ref = ref;
 
-    // Future(() => ref.watch(appParamProvider.notifier).setSelectYear(year: DateTime.now().year));
-    // Future(() => ref.watch(appParamProvider.notifier).setSelectMonth(month: DateTime.now().month));
-    // Future(
-    //   () => ref.watch(drawerListProvider.notifier).makeDrawerDateList(
-    //         year: DateTime.now().year,
-    //         month: DateTime.now().month,
-    //       ),
-    // );
-
     final appParamState = ref.watch(appParamProvider);
+
+    //================================//
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (appParamState.selectYear == 0 || appParamState.selectMonth == 0) {
+        ref.read(appParamProvider.notifier).setSelectYear(year: DateTime.now().year);
+
+        ref.read(appParamProvider.notifier).setSelectMonth(month: DateTime.now().month);
+
+        ref
+            .read(drawerListProvider.notifier)
+            .makeDrawerDateList(year: DateTime.now().year, month: DateTime.now().month);
+      }
+
+      if (appParamState.selectMonth > 6) {
+        _scrollControllerMonth.jumpTo(_scrollControllerMonth.position.maxScrollExtent);
+      }
+    });
+    //================================//
 
     //////////////////////////////////////////////
     final drawerYears = <int>[];
@@ -50,7 +62,7 @@ class MonthlyDrawer extends ConsumerWidget {
     //////////////////////////////////////////////
 
     return Drawer(
-      backgroundColor: Colors.blueGrey.withOpacity(0.4),
+      backgroundColor: Colors.blueGrey.withOpacity(0.2),
       child: Container(
         padding: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
@@ -66,9 +78,10 @@ class MonthlyDrawer extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 70),
+              const SizedBox(height: 30),
               drawerYearDropDown,
               SingleChildScrollView(
+                controller: _scrollControllerMonth,
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: List.generate(12, (index) => index + 1).map((e) {
@@ -100,6 +113,7 @@ class MonthlyDrawer extends ConsumerWidget {
                 ),
               ),
               Divider(color: Colors.white.withOpacity(0.4), thickness: 5),
+              const SizedBox(height: 10),
               Expanded(child: _displayDrawerDateList()),
             ],
           ),
@@ -113,7 +127,28 @@ class MonthlyDrawer extends ConsumerWidget {
     final list = <Widget>[];
 
     _ref.watch(drawerListProvider.select((value) => value.drawerDateList)).forEach((element) {
-      list.add(Text(element.day.toString().padLeft(2, '0')));
+      final dispDay = '${element.day.toString().padLeft(2, '0')}（${element.youbiStr.substring(0, 3)}）';
+
+      list.add(Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.white.withOpacity(0.3),
+            ),
+          ),
+          color:
+              (element.yyyymmdd == DateTime.now().yyyymmdd) ? Colors.yellowAccent.withOpacity(0.1) : Colors.transparent,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(dispDay),
+            Container(),
+          ],
+        ),
+      ));
     });
 
     return SingleChildScrollView(child: Column(children: list));
