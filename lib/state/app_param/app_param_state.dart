@@ -6,5 +6,6 @@ part 'app_param_state.freezed.dart';
 class AppParamState with _$AppParamState {
   const factory AppParamState({
     @Default(0) int selectYear,
+    @Default(0) int selectMonth,
   }) = _AppParamState;
 }

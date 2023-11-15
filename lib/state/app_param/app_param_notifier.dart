@@ -12,6 +12,9 @@ class AppParamNotifier extends StateNotifier<AppParamState> {
 
   ///
   Future<void> setSelectYear({required int year}) async => state = state.copyWith(selectYear: year);
+
+  ///
+  Future<void> setSelectMonth({required int month}) async => state = state.copyWith(selectMonth: month);
 }
 
 ////////////////////////////////////////////////

@@ -4,7 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../components/monthly_drawer.dart';
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.date});
+
+  final DateTime? date;
 
   ///
   @override
@@ -18,7 +20,7 @@ class HomeScreen extends ConsumerWidget {
           ],
         ),
       ),
-      drawer: const MonthlyDrawer(),
+      drawer: MonthlyDrawer(),
     );
   }
 }
