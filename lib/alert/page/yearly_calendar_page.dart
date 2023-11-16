@@ -1,9 +1,10 @@
+import 'package:brain_log/state/app_param/app_param_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../extensions/extensions.dart';
-import '../utility/utility.dart';
-import '../viewmodel/holiday_notifier.dart';
+import '../../extensions/extensions.dart';
+import '../../utility/utility.dart';
+import '../../viewmodel/holiday_notifier.dart';
 
 // ignore: must_be_immutable
 class YearlyCalendarPage extends ConsumerWidget {
@@ -19,11 +20,13 @@ class YearlyCalendarPage extends ConsumerWidget {
 
   final Utility _utility = Utility();
 
+  late BuildContext _context;
   late WidgetRef _ref;
 
   ///
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    _context = context;
     _ref = ref;
 
     return AlertDialog(
@@ -82,12 +85,7 @@ class YearlyCalendarPage extends ConsumerWidget {
       list.add(getRow(days: days, rowNum: i));
     }
 
-    return SingleChildScrollView(
-      child: DefaultTextStyle(
-        style: const TextStyle(fontSize: 7),
-        child: Column(children: list),
-      ),
-    );
+    return SingleChildScrollView(child: Column(children: list));
   }
 
   ///
@@ -95,18 +93,41 @@ class YearlyCalendarPage extends ConsumerWidget {
     final list = <Widget>[];
 
     for (var i = rowNum * 7; i < ((rowNum + 1) * 7); i++) {
+      final exDays = (days[i] == '') ? <String>[] : days[i].split('-');
+
       list.add(
         Expanded(
           child: (days[i] == '')
               ? Container()
-              : Container(
-                  margin: const EdgeInsets.all(3),
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white.withOpacity(0.4)),
-                    color: getBgColor(mmdd: days[i]),
+              : GestureDetector(
+                  onTap: () async {
+                    await _ref
+                        .read(appParamProvider.notifier)
+                        .setSelectedDate(date: DateTime(date.yyyy.toInt(), exDays[0].toInt(), exDays[1].toInt()));
+
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(_context);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white.withOpacity(0.4)),
+                      color: getBgColor(mmdd: days[i]),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: _context.screenSize.height / 40),
+                          child: Text(
+                            (exDays[1] == '01') ? exDays[0] : days[i],
+                            style: TextStyle(fontSize: (exDays[1] == '01') ? 12 : 8),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Text(days[i]),
                 ),
         ),
       );
@@ -128,11 +149,7 @@ class YearlyCalendarPage extends ConsumerWidget {
 
     final exDate = mmdd.split('-');
 
-    final genDate = DateTime(
-      date.yyyy.toInt(),
-      exDate[0].toInt(),
-      exDate[1].toInt(),
-    );
+    final genDate = DateTime(date.yyyy.toInt(), exDate[0].toInt(), exDate[1].toInt());
 
     return _utility.getYoubiColor(date: genDate, youbiStr: genDate.youbiStr, holiday: holidayState.data);
   }

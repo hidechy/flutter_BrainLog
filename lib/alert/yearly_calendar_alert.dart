@@ -1,6 +1,11 @@
-import 'package:brain_log/page/yearly_calendar_page.dart';
+import 'package:brain_log/state/app_param/app_param_notifier.dart';
 import 'package:flutter/material.dart';
+
+// ignore: depend_on_referenced_packages
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'page/yearly_calendar_page.dart';
 
 class TabInfo {
   TabInfo(this.label, this.widget);
@@ -10,7 +15,7 @@ class TabInfo {
 }
 
 // ignore: must_be_immutable
-class YearlyCalendarAlert extends ConsumerWidget {
+class YearlyCalendarAlert extends HookConsumerWidget {
   YearlyCalendarAlert({super.key});
 
   List<TabInfo> tabs = [];
@@ -19,6 +24,22 @@ class YearlyCalendarAlert extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     makeTab();
+
+    final tabController = useTabController(initialLength: tabs.length);
+
+    //========================================= 最初に開くタブを指定する
+
+    // ignore: cascade_invocations
+    tabController.index = 1;
+
+    //カレンダーで日付が指定されている場合
+    final selectedDate = ref.watch(appParamProvider.select((value) => value.selectedDate));
+    if (selectedDate != null) {
+      final selectedYear = selectedDate.year;
+      final lastYear = DateTime.now().year + 1;
+      tabController.index = lastYear - selectedYear;
+    }
+    //========================================= 最初に開くタブを指定する
 
     return DefaultTabController(
       length: tabs.length,
@@ -36,6 +57,10 @@ class YearlyCalendarAlert extends ConsumerWidget {
             //-------------------------//これを消すと「←」が出てくる（消さない）
 
             bottom: TabBar(
+              //================================//
+              controller: tabController,
+              //================================//
+
               isScrollable: true,
               indicatorColor: Colors.blueAccent,
               tabs: tabs.map((TabInfo tab) => Tab(text: tab.label)).toList(),
@@ -43,6 +68,10 @@ class YearlyCalendarAlert extends ConsumerWidget {
           ),
         ),
         body: TabBarView(
+          //================================//
+          controller: tabController,
+          //================================//
+
           children: tabs.map((tab) => tab.widget).toList(),
         ),
       ),
