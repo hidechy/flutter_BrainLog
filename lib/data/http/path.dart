@@ -1,5 +1,6 @@
 enum APIPath {
   getholiday,
+  getOnedayArticle,
 }
 
 extension APIPathExtension on APIPath {
@@ -7,6 +8,8 @@ extension APIPathExtension on APIPath {
     switch (this) {
       case APIPath.getholiday:
         return 'getholiday';
+      case APIPath.getOnedayArticle:
+        return 'getOnedayArticle';
     }
   }
 }

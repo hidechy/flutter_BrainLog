@@ -16,7 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProviderStateMixin {
   var _currentIndex = 0;
 
-  int tabsNum = 13;
+  int tabsNum = 61;
 
   late final TabController tabController = TabController(length: tabsNum, vsync: this);
 
