@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../extensions/extensions.dart';
@@ -50,8 +51,15 @@ class HomeScreenPageParts extends ConsumerWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.all(5),
-          decoration: BoxDecoration(border: Border.all(color: Colors.white.withOpacity(0.4))),
-          child: Text(element.article),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.white.withOpacity(0.4)),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            element.article,
+            style: TextStyle(color: Colors.black),
+          ),
         ),
       );
     });
